@@ -1,0 +1,77 @@
+.color-picker {
+  width: 300px;
+
+  &-panel {
+    /**/
+    &-palette {
+      position: relative;
+      &.is-alpha{
+        background-image: conic-gradient(rgba(0,0,0,0.06) 0 25%,transparent 0 50%,rgba(0,0,0,0.06) 0 75%,transparent 0);
+        background-size: 8px 8px;
+      }
+      &-main{
+        min-height: 160px;
+      }
+      &-saturation {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+      &-gradient{
+        border-radius: 4px;
+        height: 8px;
+        width: 100%;
+        inset: 0;
+        box-shadow: inset 0 0 1px 0 rgba(0,0,0,.25);
+      }
+      &-handler {
+        box-sizing: border-box;
+        width: 16px;
+        height: 16px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0);
+        &:hover{
+          cursor: pointer;
+        }
+      }
+      &-handler-sm {
+        width: 12px;
+        height: 12px;
+      }
+      &-select{
+        margin-bottom: 10px;
+      }
+    }
+    /**/
+    &-slider{
+      &-container{
+        display: flex;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      &-group{
+        flex:1;
+        box-sizing: border-box;
+      }
+    }
+
+    &-clock{
+      position: relative;
+      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      box-shadow: inset 0 0 1px 0 rgba(0,0,0,0.25);
+      background-image: conic-gradient(rgba(0,0,0,0.06) 0 25%,transparent 0 50%,rgba(0,0,0,0.06) 0 75%,transparent 0);
+      background-size: 50% 50%;
+      &-inner{
+        width: 100%;
+        height: 100%;
+        border: 1px solid rgba(0,0,0,0.06);
+        border-radius: inherit;
+      }
+    }
+  }
+}
