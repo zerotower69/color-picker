@@ -42,11 +42,11 @@ function useColorDrag(
         if(!dragRef.current.flag){
             const calcOffset = calculate?.();
             if(calcOffset){
-                setOffsetValue(calcOffset)
+                setOffsetValue(calcOffset);
             }
         }
     }, []);
-
+    //TODO:这一步导致了重复渲染
     useEffect(() => {
         if(!dragRef.current.flag){
             onDragChange?.(offsetValue)
