@@ -38,6 +38,18 @@ const PickSaturation:FC<PickSaturationProps> =({
             // console.log(`%c 输出颜色,${newColor.toHexString()}`, `color:${newColor.toRgbString()}`)
             onChange?.(newColor)
         },
+        onColorChange(color,offset){
+            const newColor = calculateColor(
+                {
+                    offset,
+                    containerRef,
+                    targetRef:transformRef,
+                    color
+                }
+            );
+            setPickColor(newColor);
+            onChange?.(newColor)
+        },
         calculate:()=>{
             return calculateOffset(containerRef,transformRef,color)
         }

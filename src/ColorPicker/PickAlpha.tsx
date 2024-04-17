@@ -1,7 +1,7 @@
 import {CSSProperties, FC, useRef, useState} from "react";
 import cs from "classnames"
 import Handler from "./Handler.tsx";
-import Transform from "./Transform.tsx";
+import Transform, {TransformOffset} from "./Transform.tsx";
 import useColorDrag from "./useColorDrag.ts";
 import {calculateAlphaOffset, formatNumber} from "./utils.ts";
 import {Color} from "./color.ts";
@@ -30,31 +30,44 @@ const PickAlpha:FC<PickAlphaProps> =({
         color,
         direction:'x',
         onDragChange(offsetValue){
-            //计算透明度
-            const {x} = offsetValue;
-            const {width} = colorRef.current!.getBoundingClientRect();
-            //处理边界情况
-            let alpha = 1;
-            if(x<0){
-                alpha=0
-            } else if(x>=width){
-                alpha=1
-            } else{
-                alpha = x/width;
-            }
-            alpha = formatNumber(alpha,2);
+            const alpha = computeAlpha(offsetValue)
+            onChange?.(alpha)
             setPickColor(new Color({
                 r:color.r,
                 g:color.g,
                 b:color.b,
                 a:alpha
             }))
-            onChange?.(alpha)
+        },
+        onColorChange(color,offset){
+            const alpha = computeAlpha(offset);
+            setPickColor(new Color({
+                r:color.r,
+                g:color.g,
+                b:color.b,
+                a:alpha
+            }))
         },
         calculate:()=>{
             return calculateAlphaOffset(colorRef,transformRef,color)
         }
-    })
+    });
+
+    function computeAlpha(offset:TransformOffset){
+        //计算透明度
+        const {x} = offset;
+        const {width} = colorRef.current!.getBoundingClientRect();
+        //处理边界情况
+        let alpha = 1;
+        if(x<0){
+            alpha=0
+        } else if(x>=width){
+            alpha=1
+        } else{
+            alpha = x/width;
+        }
+        return  formatNumber(alpha,2);
+    }
     return (
         <div ref={containerRef} className={classNames} onMouseDown={dragStartHandle}>
             <Transform ref={transformRef} offset={offset} >

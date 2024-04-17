@@ -1,4 +1,4 @@
-import {CSSProperties, useEffect, useState} from "react"
+import {CSSProperties, memo, useEffect, useState} from "react"
 import cs from "classnames"
 import "./index.less"
 import {ColorType} from "./interface.ts";
@@ -6,6 +6,8 @@ import {Color} from "./color.ts";
 import PickSaturation from "./PickSaturation.tsx";
 import PickGradient from "./PickGradient.tsx";
 import PickAlpha from "./PickAlpha.tsx";
+
+const MemoPickSaturation = memo(PickSaturation)
 
 export interface ColorPickerProps{
     className?:string;
@@ -62,7 +64,8 @@ function ColorPickerPanel(props:ColorPickerProps){
     //选择颜色
     function pickSaturationChange(color:Color){
         setAlphaColor(color)
-        setPickColor(color)
+        setPickColor(color);
+        updateMergeColor(color,alpha)
     }
 
     //选择色相
@@ -74,23 +77,25 @@ function ColorPickerPanel(props:ColorPickerProps){
 
     //选择透明度
     function pickAlphaChange(alpha:number){
-        setAlpha(alpha)
+        setAlpha(alpha);
+        updateMergeColor(pickColor,alpha)
     }
 
-    useEffect(() => {
+    //更新最终的颜色值
+    function updateMergeColor(color:Color,alpha:number){
         const newColor = new Color({
-            r:pickColor.r,
-            g:pickColor.g,
-            b:pickColor.b,
+            r:color.r,
+            g:color.g,
+            b:color.b,
             a:alpha
         });
         setColorValue(newColor);
         onChange?.(newColor)
-    }, [pickColor,alpha]);
+    }
 
 
     return <div className={classNames} style={style}>
-        <PickSaturation color={hueColor} onChange={pickSaturationChange}
+        <MemoPickSaturation color={hueColor} onChange={pickSaturationChange}
                         className={`color-picker-panel-palette-select`}/>
         <div className="color-picker-panel-slider-container">
             <div className="color-picker-panel-slider-group">

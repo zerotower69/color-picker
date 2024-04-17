@@ -1,6 +1,6 @@
 import {TransformOffset} from "./Transform"
 import React, {useEffect, useRef, useState} from "react";
-import {Color} from "./color.ts";
+import {Color} from "./color";
 
 type EventType =
     | MouseEvent //这是ts内置的鼠标事件类型
@@ -15,6 +15,7 @@ interface useColorDragProps {
     targetRef:React.RefObject<HTMLDivElement>;
     direction?:'x'|'y';
     onDragChange?:(offset:TransformOffset)=>void;
+    onColorChange?:(color:Color,offset:TransformOffset)=>void
     calculate?:()=>TransformOffset
 }
 
@@ -28,6 +29,7 @@ function useColorDrag(
         containerRef,
         direction,
         onDragChange,
+        onColorChange,
         calculate
     } = props;
 
@@ -44,13 +46,12 @@ function useColorDrag(
             if(calcOffset){
                 setOffsetValue(calcOffset);
             }
+            // onDragChange?.(offsetValue)
         }
     }, []);
-    //TODO:这一步导致了重复渲染
+
     useEffect(() => {
-        if(!dragRef.current.flag){
-            onDragChange?.(offsetValue)
-        }
+        onColorChange?.(color,offsetValue)
     }, [color]);
 
     useEffect(() => {
